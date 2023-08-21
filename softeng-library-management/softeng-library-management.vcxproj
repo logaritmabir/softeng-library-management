@@ -123,25 +123,51 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AcademicianPersonelPage.cpp" />
+    <ClCompile Include="EmployeePersonelPage.cpp" />
     <ClCompile Include="LoginForm.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="RegisterForm.cpp" />
     <ClCompile Include="StudentPersonelPage.cpp" />
+    <ClCompile Include="WelcomeForm.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Academician.h" />
+    <ClInclude Include="AcademicianPersonelPage.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="EmployeePersonelPage.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="LoginForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="RegisterForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="Student.h" />
     <ClInclude Include="StudentPersonelPage.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="WelcomeForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AcademicianPersonelPage.resx">
+      <DependentUpon>AcademicianPersonelPage.h</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="LoginForm.resx">
       <DependentUpon>LoginForm.h</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="RegisterForm.resx">
+      <DependentUpon>RegisterForm.h</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="StudentPersonelPage.resx">
       <DependentUpon>StudentPersonelPage.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WelcomeForm.resx">
+      <DependentUpon>WelcomeForm.h</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

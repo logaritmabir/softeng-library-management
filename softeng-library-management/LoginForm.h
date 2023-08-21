@@ -1,6 +1,8 @@
 #pragma once
 #include "Student.h"
 #include "StudentPersonelPage.h"
+#include "Academician.h"
+#include "AcademicianPersonelPage.h"
 
 namespace softenglibrarymanagement {
 
@@ -202,38 +204,96 @@ private: System::Void buttonLogin_Click(System::Object^ sender, System::EventArg
 		MessageBox::Show("Oradan bakýnca müneccime mi benziyorum ? Doldursana kardeþim þu kutucuklarý.","Bilgi", MessageBoxButtons::OK);
 		return;
 	}
-	try
-	{
-		String^ connString = "Data Source=localhost\\HEY;Initial Catalog=library;Integrated Security=True";
-		SqlConnection connection(connString);
-		connection.Open();
+	String^ connString = "Data Source=localhost;Initial Catalog=library;Integrated Security=True";
+	SqlConnection connection(connString);
+	SqlDataReader^ reader;
 
-		String^ querryGetUserProperties = "SELECT * FROM students WHERE number = @userID AND password = @password";
-		SqlCommand commandGetUserProperties(querryGetUserProperties, % connection);
+	if (userType == "Öðrenci") {
+		try
+		{
+			connection.Open();
+			String^ querryGetUserProperties = "SELECT * FROM students WHERE number = @userID AND password = @password";
+			SqlCommand commandGetUserProperties(querryGetUserProperties, % connection);
 
-		commandGetUserProperties.Parameters->AddWithValue("@userID", userID);
-		commandGetUserProperties.Parameters->AddWithValue("@password", password);
+			commandGetUserProperties.Parameters->AddWithValue("@userID", userID);
+			commandGetUserProperties.Parameters->AddWithValue("@password", password);
 
-		SqlDataReader^ reader = commandGetUserProperties.ExecuteReader();
-		if (reader->Read()) {
-			Student^ student = gcnew Student;
-			student->name = reader->GetString(1);
-			student->surname = reader->GetString(2);
-			student->number = reader->GetString(3);
-			student->penalty = reader->GetInt32(7);
-			
-			StudentPersonelPage^ studentPage = gcnew StudentPersonelPage(student);
-			this->Hide();
-			studentPage->ShowDialog();
+			reader = commandGetUserProperties.ExecuteReader();
+			if (reader->Read()) {
+				Student^ student = gcnew Student;
+				student->ID = reader->GetInt32(0);
+				student->name = reader->GetString(1);
+				student->surname = reader->GetString(2);
+				student->number = reader->GetString(3);
+				student->email = reader->GetString(4);
+				student->phone = reader->GetString(6);
+				student->penalty = reader->GetInt32(7);
+
+				StudentPersonelPage^ studentPage = gcnew StudentPersonelPage(student);
+				this->Hide();
+				studentPage->ShowDialog();
+			}
+			else {
+				MessageBox::Show("The person you have called can not answer the phone", "Kullanýcý Bulunamadý", MessageBoxButtons::OK);
+			}
 		}
-		else {
-			MessageBox::Show("The person you have called can not answer the phone", "Kullanýcý Bulunamadý", MessageBoxButtons::OK);
+		catch (Exception^ &e)
+		{
+			MessageBox::Show(e->Message, "Kullanýcý Bulunamadý", MessageBoxButtons::OK);
 		}
-
+		finally {
+			reader->Close();
+			connection.Close();
+		}
 	}
-	catch (Exception^ e)
-	{
-		MessageBox::Show(e->Message, "Baðlantý Hatasý", MessageBoxButtons::OK);
+	else if (userType == "Akademisyen") {
+		try
+		{
+			connection.Open();
+			String^ querryGetUserProperties = "SELECT * FROM academicians WHERE number = @userID AND password = @password";
+			SqlCommand commandGetUserProperties(querryGetUserProperties, % connection);
+
+			commandGetUserProperties.Parameters->AddWithValue("@userID", userID);
+			commandGetUserProperties.Parameters->AddWithValue("@password", password);
+
+			reader = commandGetUserProperties.ExecuteReader();
+			if (reader->Read()) {
+				Academician^ academician = gcnew Academician;
+				academician->ID = reader->GetInt32(0);
+				academician->name = reader->GetString(1);
+				academician->surname = reader->GetString(2);
+				academician->email = reader->GetString(3);
+				academician->number = reader->GetString(4);
+				academician->departmentID = reader->GetInt32(6);
+				AcademicianPersonelPage^ academicianPage = gcnew AcademicianPersonelPage(academician);
+				this->Hide();
+				academicianPage->ShowDialog();
+			}
+			else {
+				MessageBox::Show("The person you have called can not answer the phone", "Kullanýcý Bulunamadý", MessageBoxButtons::OK);
+			}
+		}
+		catch (Exception^& e)
+		{
+			MessageBox::Show(e->Message, "Kullanýcý Bulunamadý", MessageBoxButtons::OK);
+		}
+		finally {
+			reader->Close();
+			connection.Close();
+		}
+	}
+	else if (userType == "Memur") {
+		try
+		{
+
+		}
+		catch (Exception^ &e)
+		{
+			MessageBox::Show(e->Message, "Kullanýcý Bulunamadý", MessageBoxButtons::OK);
+		}
+		finally {
+
+		}
 	}
 }
 private: System::Void comboBoxUserType_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
